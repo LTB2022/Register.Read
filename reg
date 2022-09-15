@@ -1,0 +1,17 @@
+def read_register(self, *args):
+        """send a ReadRegister command for the positional register address or name arguments.
+        The register values are returned as a list for multiple arguments or an integer for a single argument. ::
+        
+        tx_mode = Chipset.read_register(0x6302)
+        rx_mode = Chipset.read_register("CIU_RxMode")
+        tx_mode, rx_mode = Chipset.read_register("CIU_TxMode", "CIU_RxMode")
+        
+        """
+        
+        def addr(r)
+            return self.REGBYNAME[r] if type(r) is str else r
+            
+        args = [addr(reg) for reg in args]
+        data = b ''.join([pack(">H", reg) for reg in args])
+        data = self._read_register(data)
+        return list(data) if len(data) > 1 else data[0]
